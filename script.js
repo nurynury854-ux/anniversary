@@ -1,3 +1,8 @@
+// Prevent browser scroll restoration
+if ('scrollRestoration' in window.history) {
+  window.history.scrollRestoration = 'manual';
+}
+
 // --------------------
 // DOM ELEMENTS
 // --------------------
@@ -174,12 +179,18 @@ function resetState() {
   isPausedAtChapter = false;
   lastMoveTime = 0;
   
+  // Force world back to top
+  world.style.transform = "translateY(0px)";
+  
+  // Ensure intro is visible
   intro.style.display = "flex";
   intro.style.opacity = "1";
+  intro.style.visibility = "visible";
   
   fullscreenScenes.forEach(scene => {
     scene.style.opacity = "0";
     scene.style.pointerEvents = "none";
+    scene.style.visibility = "hidden";
   });
   
   sceneTriggers.forEach(item => { item.paused = false; });
@@ -188,10 +199,15 @@ function resetState() {
     card.style.opacity = "0";
     card.style.pointerEvents = "none";
     card.style.transform = "translateX(-50%) scale(0.95)";
+    card.style.visibility = "hidden";
+  });
+  
+  chapterTitles.forEach(title => {
+    title.style.opacity = "0";
+    title.style.visibility = "hidden";
   });
   
   setExpression("neutral");
-  updateWorld();
 }
 
 // --------------------
