@@ -74,13 +74,6 @@ function recalcBounds() {
 window.addEventListener("resize", recalcBounds);
 recalcBounds();
 
-// Initialize game state on page load
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", resetState);
-} else {
-  resetState();
-}
-
 function setExpression(name) {
   if (expressions[name]) {
     currentExpression = name;
@@ -208,6 +201,13 @@ function resetState() {
   });
   
   setExpression("neutral");
+}
+
+// Initialize game state on page load
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", resetState);
+} else {
+  resetState();
 }
 
 // --------------------
