@@ -4,6 +4,7 @@
   padding: 0;
   box-sizing: border-box;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background-image: './first_background.png';
 }
 
 body {
@@ -78,7 +79,7 @@ body {
 /* Character */
 #character {
   position: fixed;
-  bottom: 60px;
+  bottom: 80px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 100;
@@ -86,8 +87,8 @@ body {
 }
 
 .avatar {
-  width: 96px;
-  height: 96px;
+  width: 112px;
+  height: 112px;
   background-image: url("sprites/her_neutral.png");
   background-size: contain;
   background-repeat: no-repeat;
