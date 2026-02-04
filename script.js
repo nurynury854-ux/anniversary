@@ -116,8 +116,8 @@ function updateMemories() {
     const cardCenter = rect.top + rect.height * 0.5;
     const distance = Math.abs(viewCenter - cardCenter);
 
-    // Show card when within 350px of its actual position
-    if (distance < 350) {
+    // Show card when within 250px of viewport center (closer to middle of screen)
+    if (distance < 250) {
       card.style.opacity = "1";
       card.style.pointerEvents = "auto";
       card.style.transform = "translateX(-50%) scale(1)";
