@@ -67,6 +67,11 @@ let expressionTimers = [];
 
 function updateWorld() {
   world.style.transform = `translateY(${positionY}px)`;
+  if (positionY <= maxDown + 5) {
+    world.classList.add("world-bg-end");
+  } else {
+    world.classList.remove("world-bg-end");
+  }
 }
 
 function recalcBounds() {
@@ -308,6 +313,7 @@ function resetState() {
   
   // Force world back to top
   world.style.transform = "translateY(0px)";
+  world.classList.remove("world-bg-end");
   
   // Ensure intro is visible
   intro.style.display = "flex";

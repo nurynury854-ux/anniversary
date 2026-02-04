@@ -66,8 +66,14 @@ body {
   left: 0;
   width: 100%;
   height: 2000vh;
-  background: linear-gradient(#1a1a24, #101018);
+  background: url("first_background.png") center top / cover no-repeat,
+              linear-gradient(#1a1a24, #101018);
   will-change: transform;
+}
+
+#world.world-bg-end {
+  background: url("second_background.png") center top / cover no-repeat,
+              linear-gradient(#1a1a24, #101018);
 }
 
 /* Character */
@@ -183,8 +189,8 @@ body {
 .memory-card[data-trigger="18"] { top: 120vh; }
 .memory-card[data-trigger="19"] { top: 165vh; }
 .memory-card[data-trigger="20"] { top: 210vh; }
-.memory-card[data-trigger="21"] { top: 255vh; }
-.memory-card[data-trigger="22"] { top: 290vh; }
+.memory-card[data-trigger="21"] { top: 240vh; }
+.memory-card[data-trigger="22"] { top: 265vh; }
 
 /* Scene Triggers */
 .scene-trigger {
@@ -201,7 +207,7 @@ body {
 /* Final Text */
 .final-text {
   position: absolute;
-  top: 260vh;
+  top: 285vh;
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
