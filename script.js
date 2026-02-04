@@ -69,6 +69,13 @@ function recalcBounds() {
 window.addEventListener("resize", recalcBounds);
 recalcBounds();
 
+// Initialize game state on page load
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", resetState);
+} else {
+  resetState();
+}
+
 function setExpression(name) {
   if (expressions[name]) {
     currentExpression = name;
@@ -160,9 +167,41 @@ function moveBackward() {
   checkChapterTriggers();
 }
 
+function resetState() {
+  positionY = 0;
+  journeyStarted = false;
+  canMove = false;
+  isPausedAtChapter = false;
+  lastMoveTime = 0;
+  
+  intro.style.display = "flex";
+  intro.style.opacity = "1";
+  
+  fullscreenScenes.forEach(scene => {
+    scene.style.opacity = "0";
+    scene.style.pointerEvents = "none";
+  });
+  
+  sceneTriggers.forEach(item => { item.paused = false; });
+  
+  memoryCards.forEach(card => {
+    card.style.opacity = "0";
+    card.style.pointerEvents = "none";
+    card.style.transform = "translateX(-50%) scale(0.95)";
+  });
+  
+  setExpression("neutral");
+  updateWorld();
+}
+
 // --------------------
 // EVENT LISTENERS
 // --------------------
+
+// Reset on page load/refresh
+window.addEventListener("pageshow", () => {
+  resetState();
+});
 
 // Start button
 startBtn.addEventListener("click", () => {

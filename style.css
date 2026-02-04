@@ -111,6 +111,11 @@ body {
   transition: opacity 0.4s ease;
   z-index: 20;
   pointer-events: none;
+  visibility: hidden;
+}
+
+.chapter-title[style*="opacity: 0.8"] {
+  visibility: visible;
 }
 
 /* Memory Cards */
@@ -129,6 +134,11 @@ body {
   transition: opacity 0.3s ease, transform 0.3s ease;
   will-change: opacity, transform;
   z-index: 10;
+  visibility: hidden;
+}
+
+.memory-card[style*="opacity: 1"] {
+  visibility: visible;
 }
 
 .memory-card img {
@@ -221,6 +231,11 @@ body {
   z-index: 50;
   transition: opacity 0.3s ease;
   will-change: opacity;
+  visibility: hidden;
+}
+
+.fullscreen-scene[style*="opacity: 1"] {
+  visibility: visible;
 }
 
 .scene-content {
