@@ -66,14 +66,13 @@ body {
   left: 0;
   width: 100%;
   height: 2000vh;
-  background: url("first_background.png") center top / cover no-repeat,
-              linear-gradient(#1a1a24, #101018);
+  --bg1-height: 0px;
+  background-image: url("first_background.png"), url("second_background.png"),
+    linear-gradient(#1a1a24, #101018);
+  background-position: center top, center var(--bg1-height), center top;
+  background-size: 100% auto, 100% auto, 100% 100%;
+  background-repeat: no-repeat, repeat-y, no-repeat;
   will-change: transform;
-}
-
-#world.world-bg-end {
-  background: url("second_background.png") center top / cover no-repeat,
-              linear-gradient(#1a1a24, #101018);
 }
 
 /* Character */

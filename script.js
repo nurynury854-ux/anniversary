@@ -60,6 +60,8 @@ const triggeredCards = new Set();
 const triggeredScenes = new Set();
 let finalTextTriggered = false;
 let expressionTimers = [];
+const firstBackground = new Image();
+firstBackground.src = "first_background.png";
 
 // --------------------
 // FUNCTIONS
@@ -67,11 +69,13 @@ let expressionTimers = [];
 
 function updateWorld() {
   world.style.transform = `translateY(${positionY}px)`;
-  if (positionY <= maxDown + 5) {
-    world.classList.add("world-bg-end");
-  } else {
-    world.classList.remove("world-bg-end");
-  }
+}
+
+function updateBackgroundLayout() {
+  if (!firstBackground.naturalWidth) return;
+  const scale = window.innerWidth / firstBackground.naturalWidth;
+  const height = Math.round(firstBackground.naturalHeight * scale);
+  world.style.setProperty("--bg1-height", `${height}px`);
 }
 
 function recalcBounds() {
@@ -82,8 +86,13 @@ function recalcBounds() {
   updateMemories();
 }
 
-window.addEventListener("resize", recalcBounds);
+window.addEventListener("resize", () => {
+  recalcBounds();
+  updateBackgroundLayout();
+});
 recalcBounds();
+firstBackground.addEventListener("load", updateBackgroundLayout);
+updateBackgroundLayout();
 
 function setExpression(name) {
   if (expressions[name]) {
@@ -313,7 +322,6 @@ function resetState() {
   
   // Force world back to top
   world.style.transform = "translateY(0px)";
-  world.classList.remove("world-bg-end");
   
   // Ensure intro is visible
   intro.style.display = "flex";
