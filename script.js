@@ -97,6 +97,7 @@ function checkChapterTriggers() {
 
       item.scene.style.opacity = "1";
       item.scene.style.pointerEvents = "auto";
+      item.scene.style.visibility = "visible";
     }
 
     // If we've moved away from trigger zone, reset pause
@@ -119,10 +120,12 @@ function updateMemories() {
       card.style.opacity = "1";
       card.style.pointerEvents = "auto";
       card.style.transform = "translateX(-50%) scale(1)";
+      card.style.visibility = "visible";
     } else {
       card.style.opacity = "0";
       card.style.pointerEvents = "none";
       card.style.transform = "translateX(-50%) scale(0.95)";
+      card.style.visibility = "hidden";
     }
   });
 
@@ -132,6 +135,7 @@ function updateMemories() {
     const titleCenter = rect.top + rect.height * 0.5;
     const distance = Math.abs(viewCenter - titleCenter);
     title.style.opacity = distance < 400 ? "0.8" : "0";
+    title.style.visibility = distance < 400 ? "visible" : "hidden";
   });
 }
 
@@ -249,6 +253,7 @@ document.querySelectorAll(".continueBtn").forEach(btn => {
     fullscreenScenes.forEach(scene => {
       scene.style.opacity = "0";
       scene.style.pointerEvents = "none";
+      scene.style.visibility = "hidden";
     });
     
     // Re-enable movement
