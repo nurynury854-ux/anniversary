@@ -55,6 +55,12 @@ const expressions = {
   tease: "sprites/her_tease.png"
 };
 
+const finalText = document.querySelector(".final-text");
+const triggeredCards = new Set();
+const triggeredScenes = new Set();
+let finalTextTriggered = false;
+let expressionTimers = [];
+
 // --------------------
 // FUNCTIONS
 // --------------------
@@ -81,6 +87,103 @@ function setExpression(name) {
   }
 }
 
+function clearExpressionTimers() {
+  expressionTimers.forEach(timerId => clearTimeout(timerId));
+  expressionTimers = [];
+}
+
+function scheduleExpression(name, delayMs) {
+  const timerId = setTimeout(() => setExpression(name), delayMs);
+  expressionTimers.push(timerId);
+}
+
+function handleCardExpression(triggerId) {
+  clearExpressionTimers();
+
+  switch (triggerId) {
+    case "1":
+      setExpression("neutral");
+      break;
+    case "2":
+      setExpression("smile");
+      break;
+    case "3":
+      setExpression("neutral");
+      break;
+    case "5":
+      setExpression("smile");
+      break;
+    case "6":
+      setExpression("smile");
+      scheduleExpression("affectionate", 500);
+      scheduleExpression("smile", 1000);
+      break;
+    case "7":
+      setExpression("happy");
+      scheduleExpression("tired", 1200);
+      scheduleExpression("neutral", 2200);
+      break;
+    case "8":
+      setExpression("smile");
+      break;
+    case "9":
+      setExpression("happy");
+      break;
+    case "10":
+      setExpression("tired");
+      scheduleExpression("affectionate", 1000);
+      break;
+    case "11":
+      setExpression("smile");
+      break;
+    case "12":
+      setExpression("happy");
+      break;
+    case "13":
+      setExpression("neutral");
+      break;
+    case "14":
+      setExpression("smile");
+      break;
+    case "15":
+      setExpression("affectionate");
+      break;
+    case "16":
+      setExpression("smile");
+      break;
+    case "17":
+      setExpression("affectionate");
+      break;
+    case "18":
+      setExpression("neutral");
+      break;
+    case "19":
+      setExpression("tired");
+      scheduleExpression("smile", 1000);
+      break;
+    case "20":
+      setExpression("happy");
+      break;
+    case "21":
+      setExpression("tired");
+      scheduleExpression("affectionate", 1000);
+      break;
+    case "22":
+      setExpression("smile");
+      break;
+    default:
+      break;
+  }
+}
+
+function handleSceneExpression(triggerId) {
+  clearExpressionTimers();
+
+  if (triggerId === "4") {
+    setExpression("happy");
+  }
+}
+
 function checkChapterTriggers() {
   const viewCenter = window.innerHeight * 0.5;
 
@@ -98,6 +201,12 @@ function checkChapterTriggers() {
       item.scene.style.opacity = "1";
       item.scene.style.pointerEvents = "auto";
       item.scene.style.visibility = "visible";
+
+      const triggerId = item.marker.dataset.trigger;
+      if (!triggeredScenes.has(triggerId)) {
+        triggeredScenes.add(triggerId);
+        handleSceneExpression(triggerId);
+      }
     }
 
     // If we've moved away from trigger zone, reset pause
@@ -121,6 +230,12 @@ function updateMemories() {
       card.style.pointerEvents = "auto";
       card.style.transform = "translateX(-50%) scale(1)";
       card.style.visibility = "visible";
+
+      const triggerId = card.dataset.trigger;
+      if (!triggeredCards.has(triggerId)) {
+        triggeredCards.add(triggerId);
+        handleCardExpression(triggerId);
+      }
     } else {
       card.style.opacity = "0";
       card.style.pointerEvents = "none";
@@ -137,6 +252,17 @@ function updateMemories() {
     title.style.opacity = distance < 400 ? "0.8" : "0";
     title.style.visibility = distance < 400 ? "visible" : "hidden";
   });
+
+  if (finalText && !finalTextTriggered) {
+    const rect = finalText.getBoundingClientRect();
+    const textCenter = rect.top + rect.height * 0.5;
+    const distance = Math.abs(viewCenter - textCenter);
+    if (distance < 300) {
+      finalTextTriggered = true;
+      clearExpressionTimers();
+      setExpression("neutral");
+    }
+  }
 }
 
 function moveForward() {
@@ -175,6 +301,10 @@ function resetState() {
   canMove = false;
   isPausedAtChapter = false;
   lastMoveTime = 0;
+  finalTextTriggered = false;
+  triggeredCards.clear();
+  triggeredScenes.clear();
+  clearExpressionTimers();
   
   // Force world back to top
   world.style.transform = "translateY(0px)";
@@ -259,5 +389,8 @@ document.querySelectorAll(".continueBtn").forEach(btn => {
     // Re-enable movement
     isPausedAtChapter = false;
     canMove = true;
+
+    clearExpressionTimers();
+    setExpression("smile");
   });
 });
