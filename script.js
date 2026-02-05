@@ -102,7 +102,7 @@ updateBackgroundLayout();
 
 function updateSpriteFrame() {
   if (expressions[currentExpression]) {
-    const frameType = isWalking ? "walking" : "standing";
+    const frameType = walkingFrameIndex === 0 ? "standing" : "walking";
     avatar.style.backgroundImage = `url(${expressions[currentExpression][frameType]})`;
   }
 }
