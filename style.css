@@ -107,6 +107,11 @@ body {
   padding-top: 100vh;
 }
 
+/* First chapter needs extra space at top */
+#chapter1 {
+  padding-top: 200vh;
+}
+
 .chapter-title {
   position: absolute;
   top: 80vh;
