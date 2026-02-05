@@ -28,6 +28,12 @@ let canMove = false;
 let isPausedAtChapter = false;
 let currentExpression = "neutral";
 
+// Walking animation
+let isWalking = false;
+let walkingFrameIndex = 0;
+let walkAnimationTimer = null;
+const walkFrameSpeed = 200; // milliseconds between frames
+
 // Keyboard state for debouncing
 let keyDown = false;
 let lastMoveTime = 0;
@@ -47,12 +53,12 @@ const sceneTriggers = Array.from(sceneMarkers)
   .filter(item => item.scene);
 
 const expressions = {
-  neutral: "sprites/her_neutral.png",
-  smile: "sprites/her_smile.png",
-  happy: "sprites/her_happy.png",
-  tired: "sprites/her_tired.png",
-  affectionate: "sprites/her_affection.png",
-  tease: "sprites/her_tease.png"
+  neutral: { standing: "sprites/her_neutral.png", walking: "sprites/her_neutral_walking.png" },
+  smile: { standing: "sprites/her_smile.png", walking: "sprites/her_smile_walking.png" },
+  happy: { standing: "sprites/her_happy.png", walking: "sprites/her_happy_walking.png" },
+  tired: { standing: "sprites/her_tired.png", walking: "sprites/her_tired_walking.png" },
+  affectionate: { standing: "sprites/her_affection.png", walking: "sprites/her_affection_walking.png" },
+  tease: { standing: "sprites/her_tease.png", walking: "sprites/her_tease_walking.png" }
 };
 
 const finalText = document.querySelector(".final-text");
@@ -94,11 +100,43 @@ recalcBounds();
 firstBackground.addEventListener("load", updateBackgroundLayout);
 updateBackgroundLayout();
 
+function updateSpriteFrame() {
+  if (expressions[currentExpression]) {
+    const frameType = isWalking ? "walking" : "standing";
+    avatar.style.backgroundImage = `url(${expressions[currentExpression][frameType]})`;
+  }
+}
+
 function setExpression(name) {
   if (expressions[name]) {
     currentExpression = name;
-    avatar.style.backgroundImage = `url(${expressions[name]})`;
+    walkingFrameIndex = 0;
+    updateSpriteFrame();
   }
+}
+
+function startWalking() {
+  if (isWalking) return;
+  
+  isWalking = true;
+  walkingFrameIndex = 0;
+  updateSpriteFrame();
+  
+  // Alternate between frames
+  if (walkAnimationTimer) clearInterval(walkAnimationTimer);
+  walkAnimationTimer = setInterval(() => {
+    walkingFrameIndex = (walkingFrameIndex + 1) % 2;
+    updateSpriteFrame();
+  }, walkFrameSpeed);
+}
+
+function stopWalking() {
+  if (!isWalking) return;
+  
+  isWalking = false;
+  walkingFrameIndex = 0;
+  if (walkAnimationTimer) clearInterval(walkAnimationTimer);
+  updateSpriteFrame();
 }
 
 function clearExpressionTimers() {
@@ -286,6 +324,7 @@ function moveForward() {
   if (now - lastMoveTime < moveCooldown) return;
   lastMoveTime = now;
 
+  startWalking();
   positionY -= speed;
   if (positionY < maxDown) positionY = maxDown;
 
@@ -301,6 +340,7 @@ function moveBackward() {
   if (now - lastMoveTime < moveCooldown) return;
   lastMoveTime = now;
 
+  startWalking();
   positionY += speed;
   if (positionY > maxUp) positionY = maxUp;
 
@@ -319,6 +359,7 @@ function resetState() {
   triggeredCards.clear();
   triggeredScenes.clear();
   clearExpressionTimers();
+  stopWalking();
   
   // Force world back to top
   world.style.transform = "translateY(0px)";
@@ -387,6 +428,12 @@ window.addEventListener("keydown", (e) => {
   if (e.key === "w" || e.key === "W") {
     e.preventDefault();
     moveBackward();
+  }
+});
+
+window.addEventListener("keyup", (e) => {
+  if (e.key === "s" || e.key === "S" || e.key === "w" || e.key === "W") {
+    stopWalking();
   }
 });
 
