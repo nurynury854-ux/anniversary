@@ -103,7 +103,9 @@ updateBackgroundLayout();
 function updateSpriteFrame() {
   if (expressions[currentExpression]) {
     const frameType = walkingFrameIndex === 0 ? "standing" : "walking";
-    avatar.style.backgroundImage = `url(${expressions[currentExpression][frameType]})`;
+    const imageUrl = expressions[currentExpression][frameType];
+    console.log(`Frame update: expr=${currentExpression}, frameIndex=${walkingFrameIndex}, type=${frameType}, url=${imageUrl}`);
+    avatar.style.backgroundImage = `url(${imageUrl})`;
   }
 }
 
@@ -116,16 +118,19 @@ function setExpression(name) {
 }
 
 function startWalking() {
+  console.log(`startWalking called, isWalking=${isWalking}`);
   if (isWalking) return;
   
   isWalking = true;
   walkingFrameIndex = 0;
+  console.log(`Starting walk animation, setting frameIndex=0`);
   updateSpriteFrame();
   
   // Alternate between frames
   if (walkAnimationTimer) clearInterval(walkAnimationTimer);
   walkAnimationTimer = setInterval(() => {
     walkingFrameIndex = (walkingFrameIndex + 1) % 2;
+    console.log(`Interval tick: walkingFrameIndex now = ${walkingFrameIndex}`);
     updateSpriteFrame();
   }, walkFrameSpeed);
 }
