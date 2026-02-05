@@ -30,7 +30,6 @@ let currentExpression = "neutral";
 
 // Walking animation
 let isWalking = false;
-let walkingFrameIndex = 0;
 let walkAnimationTimer = null;
 const walkFrameSpeed = 200; // milliseconds between frames
 
@@ -102,9 +101,8 @@ updateBackgroundLayout();
 
 function updateSpriteFrame() {
   if (expressions[currentExpression]) {
-    const frameType = walkingFrameIndex === 0 ? "standing" : "walking";
+    const frameType = isWalking ? "walking" : "standing";
     const imageUrl = expressions[currentExpression][frameType];
-    console.log(`Frame update: expr=${currentExpression}, frameIndex=${walkingFrameIndex}, type=${frameType}, url=${imageUrl}`);
     avatar.style.backgroundImage = `url(${imageUrl})`;
   }
 }
@@ -112,34 +110,22 @@ function updateSpriteFrame() {
 function setExpression(name) {
   if (expressions[name]) {
     currentExpression = name;
-    walkingFrameIndex = 0;
+    isWalking = false;
     updateSpriteFrame();
   }
 }
 
 function startWalking() {
-  console.log(`startWalking called, isWalking=${isWalking}`);
   if (isWalking) return;
   
   isWalking = true;
-  walkingFrameIndex = 0;
-  console.log(`Starting walk animation, setting frameIndex=0`);
   updateSpriteFrame();
-  
-  // Alternate between frames
-  if (walkAnimationTimer) clearInterval(walkAnimationTimer);
-  walkAnimationTimer = setInterval(() => {
-    walkingFrameIndex = (walkingFrameIndex + 1) % 2;
-    console.log(`Interval tick: walkingFrameIndex now = ${walkingFrameIndex}`);
-    updateSpriteFrame();
-  }, walkFrameSpeed);
 }
 
 function stopWalking() {
   if (!isWalking) return;
   
   isWalking = false;
-  walkingFrameIndex = 0;
   if (walkAnimationTimer) clearInterval(walkAnimationTimer);
   updateSpriteFrame();
 }
