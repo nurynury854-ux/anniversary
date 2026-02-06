@@ -17,7 +17,9 @@ body {
 .screen {
   position: fixed;
   inset: 0;
-  background: linear-gradient(#12121a, #0f0f14);
+  background-image: url("background.png");
+  background-size: cover;
+  background-position: center;
   display: flex;
   justify-content: center;
   align-items: center;
