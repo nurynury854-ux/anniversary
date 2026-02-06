@@ -11,6 +11,7 @@ const intro = document.getElementById("intro");
 const startBtn = document.getElementById("startBtn");
 const avatar = document.querySelector(".avatar");
 const memoryCards = document.querySelectorAll(".memory-card");
+const memoryImages = document.querySelectorAll(".memory-card img");
 const fullscreenScenes = document.querySelectorAll(".fullscreen-scene");
 const sceneMarkers = document.querySelectorAll(".scene-trigger");
 const chapterTitles = document.querySelectorAll(".chapter-title");
@@ -67,6 +68,22 @@ let finalTextTriggered = false;
 let expressionTimers = [];
 const firstBackground = new Image();
 firstBackground.src = "first_background.png";
+
+// Fallbacks for memory images (supports assets/ and root paths)
+memoryImages.forEach((img) => {
+  img.addEventListener("error", () => {
+    const originalSrc = img.getAttribute("src") || "";
+    const fileName = originalSrc.split("/").pop();
+    if (!fileName) return;
+
+    const fallbackPaths = [`assets/${fileName}`, `${fileName}`];
+    const attempts = Number(img.dataset.fallbackAttempts || 0);
+    if (attempts < fallbackPaths.length) {
+      img.dataset.fallbackAttempts = String(attempts + 1);
+      img.src = fallbackPaths[attempts];
+    }
+  });
+});
 
 // --------------------
 // FUNCTIONS
