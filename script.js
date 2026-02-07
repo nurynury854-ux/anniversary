@@ -15,6 +15,7 @@ const memoryImages = document.querySelectorAll(".memory-card img");
 const fullscreenScenes = document.querySelectorAll(".fullscreen-scene");
 const sceneMarkers = document.querySelectorAll(".scene-trigger");
 const chapterTitles = document.querySelectorAll(".chapter-title");
+const bgm = document.getElementById("bgm");
 
 // --------------------
 // GAME STATE
@@ -422,6 +423,14 @@ startBtn.addEventListener("click", () => {
   setTimeout(() => {
     intro.style.display = "none";
   }, 600);
+
+  if (bgm) {
+    bgm.volume = 0.5;
+    const playPromise = bgm.play();
+    if (playPromise && typeof playPromise.catch === "function") {
+      playPromise.catch(() => {});
+    }
+  }
 
   journeyStarted = true;
   canMove = true;
