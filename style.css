@@ -68,7 +68,7 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  height: 2000vh;
+  height: 2500vh;
   --bg1-height: 0px;
   background-image: url("first_background.png"), url("second_background.png"),
     linear-gradient(#1a1a24, #101018);
@@ -110,6 +110,16 @@ body {
 /* First chapter needs extra space at top */
 #chapter1 {
   padding-top: 200vh;
+}
+
+/* Chapter 5 has 4 cards, needs extra height */
+#chapter5 {
+  height: 400vh;
+}
+
+/* Chapter 6 has 5 cards plus final text, needs extra height */
+#chapter6 {
+  height: 520vh;
 }
 
 .chapter-title {
@@ -207,7 +217,7 @@ body {
   pointer-events: none;
 }
 
-.scene-trigger[data-trigger="4"] { top: 340vh; }
+.scene-trigger[data-trigger="4"] { top: 360vh; }
 
 /* Final Text */
 .final-text {
